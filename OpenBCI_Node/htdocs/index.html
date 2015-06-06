@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+canvas {
+  display: block;
+}
+
+ 
+</style>
+<body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://smoothiecharts.org/smoothie.js"></script>
+<script>
+
+function Timeline() {
+  this.data = new TimeSeries();
+  this.chart = new SmoothieChart();
+  this.chart.addTimeSeries(this.data, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 1 });
+  var chartEl = document.createElement("CANVAS");
+  chartEl.setAttribute("width", "400");
+  chartEl.setAttribute("height", "200");
+  this.chart.streamTo(chartEl, 500);
+  document.body.appendChild(chartEl);
+}
+
+Timeline.prototype.sample = function (s) {
+  this.data.append(new Date().getTime(), s);
+}
+
+
+var waves = [];
+for (var i = 0; i < 8; i++) {
+  waves.push(new Timeline());
+}
+
+var process = 1;
+
+var socket = io.connect('http://127.0.0.1');
+socket.on('openbci', function (sample) {
+  if (process % 3 == 0) {
+    for (var i = 0; i < 8; i++) {
+        waves[i].sample(sample[i]);
+    }
+    process = 1;
+  }
+  process++;
+});
+</script>
