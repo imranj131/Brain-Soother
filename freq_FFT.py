@@ -1,10 +1,9 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy.fftpack import fft
+#import matplotlib.pyplot as plt
 
 #Will return the frequency with the highest amplitude
 
-def meanFFT(data,minFQ,maxFQ):
+def meanFFT(data,minFQ=6,maxFQ=50):
 	
 	FFT = np.fft.fft(data)	
 	
@@ -28,8 +27,8 @@ def meanFFT(data,minFQ,maxFQ):
 	frequency =  meanFq[np.where(meanAmp == np.max(meanAmp))[0][0]]
 	frequency = np.round(frequency)
 	
-	plt.figure()
-	plt.plot(X,abs(FFT[:N]))
-	plt.draw()
-	
+#	plt.figure()
+#	plt.plot(X,abs(FFT[:N]))
+#	plt.draw()
+#	
 	return frequency

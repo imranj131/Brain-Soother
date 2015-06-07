@@ -2,17 +2,19 @@
 import numpy as np
 
 #directory = '/home/phc/Dropbox/Hackathons/Brain-Soother/'
-def cleanData(fileName='OpenBCI-RAW-PHIL.txt'):
+def cleanData(fileName='OpenBCI-RAW-PHIL.txt', channel=2):
 
 	dataTxt = open(fileName)
 	dataString = dataTxt.read()
-
+	
 	lines = dataString.split('\n')
-
+	
 	data = []	
-
-	for l in lines[5:]:
-		n = l.split(', ')[2]
+	
+	n = 0
+	
+	for l in lines[5:-2]:
+		n = l.split(', ')[channel-1]
 		if n == "":
 			n = 0
 		else:
