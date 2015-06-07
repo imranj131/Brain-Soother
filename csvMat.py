@@ -12,11 +12,16 @@ lines = dataString.split('\n')
 data = []
 
 for l in lines[5:]:
-	data.append(l.split(', '))
+	n = l.split(', ')[2]
+	if n == "":
+		n = 0
+	else:
+		n = float(n)
+	data.append(n)
 
-for i in range(0,len(data)-1):
-	for j in range(0,len(data[i])-1):
-		data[i][j] = float(data[i][j])
+#for i in range(0,len(data)-1):
+#	for j in range(0,len(data[i])-1):
+#		data[i][j] = float(data[i][j])
 		
 		
 			
