@@ -2,7 +2,7 @@
 import numpy as np
 
 #directory = '/home/phc/Dropbox/Hackathons/Brain-Soother/'
-def function = cleanData() :
+def cleanData(data):
 	fileName = 'OpenBCI-RAW-PHIL.txt'
 
 	dataTxt = open(fileName)
@@ -21,4 +21,3 @@ def function = cleanData() :
 		data.append(n)
 
 	return data
-
