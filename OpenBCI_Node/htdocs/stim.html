@@ -27,11 +27,13 @@ var circle = svg.append('circle').attr({
         'fill':'red',
         'opacity': 1.0
 });
-
+angle =0 ;
+start_time = null;
 function blink(frequency,duration){
-    var start_time = null, last_time = null;
-    var angle = 0,  pi=3.14,  milli=0.001;
+    var last_time = null;
+    var  pi=3.14,  milli=0.001;
         function change(time) {
+
             if (last_time != null) {
                 angle += (time - last_time) * pi * frequency * milli;
             }
@@ -46,22 +48,23 @@ function blink(frequency,duration){
             }
             else{
                 start_time = null;
-                circle.attr('opacity', 1);
+                //circle.attr('opacity', 1);
             }
         }
         requestAnimationFrame(change);
 }
 
-blink(15,10);
+//blink(15,10);
 
-var process = 1;
 
-var socket = io.connect('http://127.0.0.1');
-socket.on('openbci', function (frequency,duration) {
-    process = 1;
-    console.log(arguments);
-  
-  process++;
+
+var socket = io.connect('http://127.0.0.1:8880');
+socket.on('openbci', function (data) {
+
+    if (start_time == null)
+    blink(data[0],data[1]);
+    console.log(frequency,duration,start_time);
+
 });
 </script>
 </body>

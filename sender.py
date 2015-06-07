@@ -12,7 +12,7 @@ import  threading
 import csvMat
 import freq_FFT
 
-UDP_PORT="8888"
+UDP_PORT=8888
 HOST="127.0.0.1"
 target_freq  = 15
 brain_freq = 10
@@ -28,7 +28,7 @@ def clean_up():
 
 
 def start_up():
-    global server, pool,sending_thread
+    global server
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     pool = multiprocessing.Pool(processes=2)
@@ -37,34 +37,22 @@ def start_up():
     #subprocess.Popen('node d3_socket_server.js', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     sending_thread.start()
 
-
-
 def process_and_send():
-    global target_freq,brain_freq, pool, current_duration, next_duration
-    time.sleep(current_duration)
-    if brain_connector.pause is not None:
-        brain_connector.pause.clear()
-
-        print "removing file"
-        os.remove(brain_connector.CSV_FILE_NAME)
 
 
-        matrix = csvMat.cleanData(brain_connector.CSV_FILE_NAME)
-        brain_freq = freq_FFT.meanFFT(matrix)
+    global target_freq,brain_freq, current_duration
+    matrix = csvMat.cleanData(brain_connector.CSV_FILE_NAME)
+    brain_freq = freq_FFT.meanFFT(matrix)
 
-        diff = abs(target_freq - brain_freq)
-        if  diff < 0.1:
-            target_freq += diff**0.25
+    diff = abs(target_freq - brain_freq)
+    if  diff < 0.1:
+        target_freq += diff**0.25
+    data =[target_freq,current_duration]
+    udp_sender(data)
+    sound_sender(data)
+    with open(brain_connector.CSV_FILE_NAME, 'w') as f:
+        f.write('')
 
-        data =[target_freq,current_duration]
-        print data
-
-        pool.apply_async(udp_sender, [data])
-        pool.apply_async(sound_sender, [data])
-        with open(brain_connector.CSV_FILE_NAME, 'w+') as f:
-            f.write('')
-
-        brain_connector.pause.set()
 
 
 

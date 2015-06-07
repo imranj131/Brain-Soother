@@ -13,7 +13,6 @@ import sender
 start_time = None
 board = None
 main_thread = None
-lock = threading.RLock()
 
 CSV_FILE_NAME = 'OpenBCI-RAW-PHIL.txt'
 CSV_DELIM = ", "
@@ -25,27 +24,32 @@ def clean_up():
 
 def csv_writer(sample):
 
-        t = timeit.default_timer() - start_time
+    t = timeit.default_timer() - start_time
 
-        row = ''
-        row += str(t)
+    row = ''
+    row += str(t)
+    row += CSV_DELIM
+    row += str(sample.id)
+    row += CSV_DELIM
+    for i in sample.channel_data:
+        row += str(i)
         row += CSV_DELIM
-        row += str(sample.id)
+    for i in sample.aux_data:
+        row += str(i)
         row += CSV_DELIM
-        for i in sample.channel_data:
-            row += str(i)
-            row += CSV_DELIM
-        for i in sample.aux_data:
-            row += str(i)
-            row += CSV_DELIM
-            # remove last comma
         row += '\n'
         with open(CSV_FILE_NAME, 'a') as f:
             f.write(row)
-        pause.wait()
+        if count == reset:
+            count = 0
+            sender.process_and_send()
+        else:
+            count +=1
+
+
 
 def main(port):
-    global board
+    global board,count
     board = bci.OpenBCIBoard(port=port,scaled_output=True)
     atexit.register(clean_up)
     #atexit.register(sender.clean_up())
@@ -53,12 +57,16 @@ def main(port):
     sender.start_up()
     command = ''
     while command != 'exit':
+<<<<<<< Updated upstream
+=======
+        print count
+>>>>>>> Stashed changes
         command = raw_input('Program is running. Send "exit" to stop.\n-->')
 
 
 
 def startup():
-    global start_time, main_thread, pause
+    global start_time, main_thread, pause,reset,count
     with open(CSV_FILE_NAME, 'w+') as f:
         f.write('')
 
@@ -66,10 +74,8 @@ def startup():
     for c in 'svcd':
         board.ser.write(c)
         time.sleep(0.100)
-    pause = threading.Event()
-   # print pause
 
-    pause.set()
+
     start_time = timeit.default_timer()
     main_thread.daemon =True
     main_thread.start()
