@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Circle Stimulus</title>
+    <script src="../node_modules/d3/d3.js"></script>
+</head>
+<body style="background: black">
+
+<div style="text-align: center" id="stim">
+
+</div>
+<script>
+var svgWidth = 500, svgHeight = 500;
+var margin = {top: 50, bottom: 50, right: 50, left: 50};
+    var svg = d3.select('#stim').append('svg').attr({
+        'width': svgWidth,
+        'height': svgHeight
+    });
+
+    var circle = svg.append('circle').attr({
+        'height':svgHeight-margin.top-margin.bottom,
+        'width': svgWidth - margin.left - margin.right,
+        'cx': svgWidth / 2,
+        'cy' : svgHeight /2,
+        'r' : (svgWidth - margin.left - margin.right)/2,
+        'fill':'red',
+        'opacity': 1.0
+    });
+    var angle = 0, lastTime = null,  default_micro=0.000001, freq=1/default_micro;
+    function change(time) {
+        if (lastTime != null)
+            angle += (time - lastTime) * freq * default_micro;
+        lastTime = time;
+        //console.log(angle);
+        circle.attr('opacity', (Math.sin(angle)+1)/2);
+        requestAnimationFrame(change);
+    }
+    requestAnimationFrame(change);
+</script>
+</body>
+</html>

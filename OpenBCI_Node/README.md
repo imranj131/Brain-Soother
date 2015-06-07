@@ -19,7 +19,7 @@ Running the Server
 - Modify settings according to desired behaviour. See OpenBCI_Python [README](https://github.com/OpenBCI/OpenBCI_Python/)
 - Start UDP server `--> /start`
 - Run `node socket_server.js`
-- Visit [http://127.0.0.1:8880](http://127.0.0.1:8880) to see your brain waves
+- Visit [/](http://127.0.0.1:8880) to see your brain waves
 
 Optionally 
 - Use `python udp_client.py --json` from the scripts folder to verify data is coming through
