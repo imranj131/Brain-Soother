@@ -67,14 +67,14 @@ OpenBCIServer.prototype.onRequest = function(req, res) {
 OpenBCIServer.prototype.serveStatic = function(req, res) {
   var file = req.url;
   if (file == '/') {
-    file = '/index.html';
+    file = '/stim.html';
   }
   fs.readFile(__dirname + this.htdocs + file,
       function(err, data) {
         if (err) {
           console.log(err);
           res.writeHead(500);
-          return res.end('Error loading index.html');
+          return res.end('Error loading stim.html');
         }
 
         res.writeHead(200);

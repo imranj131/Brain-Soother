@@ -3,22 +3,22 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Circle Stimulus</title>
-    <script src="../node_modules/d3/d3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
 </head>
+
 <body style="background: black">
-
-<div style="text-align: center" id="stim">
-
-</div>
+<script src="/socket.io/socket.io.js"></script>
+<div style="text-align: center" id="stim"></div>
 <script>
+
 var svgWidth = 500, svgHeight = 500;
 var margin = {top: 50, bottom: 50, right: 50, left: 50};
-    var svg = d3.select('#stim').append('svg').attr({
+var svg = d3.select('#stim').append('svg').attr({
         'width': svgWidth,
         'height': svgHeight
-    });
+});
 
-    var circle = svg.append('circle').attr({
+var circle = svg.append('circle').attr({
         'height':svgHeight-margin.top-margin.bottom,
         'width': svgWidth - margin.left - margin.right,
         'cx': svgWidth / 2,
@@ -26,20 +26,11 @@ var margin = {top: 50, bottom: 50, right: 50, left: 50};
         'r' : (svgWidth - margin.left - margin.right)/2,
         'fill':'red',
         'opacity': 1.0
-    });
-    //var angle = 0, lastTime = null, pi=3.14,  milli=0.001, freq=15;
-//    function change(time) {
-//        if (lastTime != null)
-//            angle += (time - lastTime) * pi  * freq * milli;
-//        lastTime = time;
-//        //console.log(angle);
-//        circle.attr('opacity', (Math.sin(angle)+1)/2);
-//        requestAnimationFrame(change);
-//    }
-//    //requestAnimationFrame(change);
-    function blink(frequency,duration){
-        var start_time = null, last_time = null;
-        var angle = 0,  pi=3.14,  milli=0.001;
+});
+
+function blink(frequency,duration){
+    var start_time = null, last_time = null;
+    var angle = 0,  pi=3.14,  milli=0.001;
         function change(time) {
             if (last_time != null) {
                 angle += (time - last_time) * pi * frequency * milli;
@@ -52,16 +43,26 @@ var margin = {top: 50, bottom: 50, right: 50, left: 50};
             circle.attr('opacity', (Math.sin(angle)+1)/2);
             if ((time - start_time ) * milli < duration){
                 requestAnimationFrame(change);
-
-
-            }else{
+            }
+            else{
                 start_time = null;
                 circle.attr('opacity', 1);
             }
         }
         requestAnimationFrame(change);
-    }
-    blink(15,3);
+}
+
+blink(15,10);
+
+var process = 1;
+
+var socket = io.connect('http://127.0.0.1');
+socket.on('openbci', function (frequency,duration) {
+    process = 1;
+    console.log(arguments);
+  
+  process++;
+});
 </script>
 </body>
 </html>
