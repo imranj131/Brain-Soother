@@ -23,7 +23,7 @@ def clean_up():
     print "Disconnecting"
 
 def csv_writer(sample):
-
+    global count, reset
     t = timeit.default_timer() - start_time
 
     row = ''
@@ -57,6 +57,7 @@ def main(port):
     sender.start_up()
     command = ''
     while command != 'exit':
+        print count
         command = raw_input('Program is running. Send "exit" to stop.\n-->')
 
 
@@ -65,7 +66,8 @@ def startup():
     global start_time, main_thread, pause,reset,count
     with open(CSV_FILE_NAME, 'w+') as f:
         f.write('')
-
+    count = 0
+    reset = 1000
     main_thread = threading.Thread(target=board.start_streaming, args=(csv_writer,-1))
     for c in 'svcd':
         board.ser.write(c)

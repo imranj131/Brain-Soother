@@ -45,8 +45,8 @@ def process_and_send():
     brain_freq = freq_FFT.meanFFT(matrix)
 
     diff = abs(target_freq - brain_freq)
-    if  diff < 0.1:
-        target_freq += diff**0.25
+    if  diff > 0.1:
+        target_freq += 0.5 * diff
     data =[target_freq,current_duration]
     udp_sender(data)
     sound_sender(data)
