@@ -2,8 +2,7 @@
 import numpy as np
 
 #directory = '/home/phc/Dropbox/Hackathons/Brain-Soother/'
-def cleanData(data):
-	fileName = 'OpenBCI-RAW-PHIL.txt'
+def cleanData(fileName='OpenBCI-RAW-PHIL.txt'):
 
 	dataTxt = open(fileName)
 	dataString = dataTxt.read()
