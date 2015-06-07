@@ -57,10 +57,6 @@ def main(port):
     sender.start_up()
     command = ''
     while command != 'exit':
-<<<<<<< Updated upstream
-=======
-        print count
->>>>>>> Stashed changes
         command = raw_input('Program is running. Send "exit" to stop.\n-->')
 
 
