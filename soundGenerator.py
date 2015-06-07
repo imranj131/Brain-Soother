@@ -1,7 +1,6 @@
 import pyaudio
 import time
 import numpy as np
-import matplotlib.pyplot as plt
 
 p = pyaudio.PyAudio()
 
