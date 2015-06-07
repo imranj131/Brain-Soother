@@ -27,16 +27,41 @@ var margin = {top: 50, bottom: 50, right: 50, left: 50};
         'fill':'red',
         'opacity': 1.0
     });
-    var angle = 0, lastTime = null,  default_micro=0.000001, freq=1/default_micro;
-    function change(time) {
-        if (lastTime != null)
-            angle += (time - lastTime) * freq * default_micro;
-        lastTime = time;
-        //console.log(angle);
-        circle.attr('opacity', (Math.sin(angle)+1)/2);
+    //var angle = 0, lastTime = null, pi=3.14,  milli=0.001, freq=15;
+//    function change(time) {
+//        if (lastTime != null)
+//            angle += (time - lastTime) * pi  * freq * milli;
+//        lastTime = time;
+//        //console.log(angle);
+//        circle.attr('opacity', (Math.sin(angle)+1)/2);
+//        requestAnimationFrame(change);
+//    }
+//    //requestAnimationFrame(change);
+    function blink(frequency,duration){
+        var start_time = null, last_time = null;
+        var angle = 0,  pi=3.14,  milli=0.001;
+        function change(time) {
+            if (last_time != null) {
+                angle += (time - last_time) * pi * frequency * milli;
+            }
+            else {
+                start_time = time;
+            }
+            last_time = time;
+            //console.log(angle);
+            circle.attr('opacity', (Math.sin(angle)+1)/2);
+            if ((time - start_time ) * milli < duration){
+                requestAnimationFrame(change);
+
+
+            }else{
+                start_time = null;
+                circle.attr('opacity', 1);
+            }
+        }
         requestAnimationFrame(change);
     }
-    requestAnimationFrame(change);
+    blink(15,3);
 </script>
 </body>
 </html>
